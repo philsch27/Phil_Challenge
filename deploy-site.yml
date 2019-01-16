@@ -1,0 +1,76 @@
+---
+
+- hosts: web
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  vars:
+    hostname: localhost
+    self_signed_certs:
+    - key: /etc/ssl/private/localhost.key
+      cert: /etc/ssl/certs/localhost.crt
+
+  tasks:
+    - name: Install httpd
+      package: name=nginx state=latest
+
+    - name: Create index.html
+      template:
+        src: "index.html"
+        dest: "/var/www/html/index.html"
+
+    - name: Create self-signed certificate, if configured.
+      command: >
+        openssl req -x509 -nodes -subj '/CN={{ hostname }}' -days 365
+        -newkey rsa:4096 -sha256 -keyout {{ item.key }} -out {{ item.cert }}
+        creates={{ item.cert }}
+      with_items: "{{ self_signed_certs }}"
+
+    - name: Create main nginx config file
+      template:
+        src: "default"
+        dest: "/etc/nginx/sites-available/default"
+      notify:
+      - restart nginx
+
+    # Add firewall rules to iptables
+    
+    - name: Flush existing firewall rules
+      iptables:
+        flush: true
+
+    - name: IPtables - allow port 22/SSH traffic
+      iptables:
+        chain: INPUT
+        destination_port: 22
+        jump: ACCEPT
+        protocol: tcp
+
+    - name: IPtables - allow port 80/HTTP traffic
+      iptables:
+        chain: INPUT
+        destination_port: 80
+        jump: ACCEPT
+        protocol: tcp
+
+    - name: IPtables - allow port 443/HTTPS traffic
+      iptables:
+        chain: INPUT
+        destination_port: 443
+        jump: ACCEPT
+        protocol: tcp
+
+    - name: IPtables - drop any traffic without rule
+      iptables:
+        chain: INPUT
+        jump: DROP
+
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+

@@ -1,0 +1,6 @@
+[allservers]
+10.0.3.123 
+
+[web]
+10.0.3.123	ansible_connection=ssh	ansible_user=phil
+
