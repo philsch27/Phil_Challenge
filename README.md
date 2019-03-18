@@ -1,5 +1,5 @@
-# Phil_Challenge
-Comcast - Cloud Engineer - web development challenge
+# Philip_Challenge
+Comcast - DevOps Engineer - SED challenge
 
 This repository includes an ansible playbook that deploys nginx to a remote host, configures the nginx default config file, index.html file, and configure required iptables rules.
 
