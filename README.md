@@ -14,7 +14,7 @@ the web server.
 
 • Provide your code in a Git repository named <FIRSTNAME>_Challenge on GitHub.com
   
-The following item is not included, but might be added at a later time:
+The following item is not included, but will be added in the future:
   
 • Develop and apply automated tests to validate the correctness of the server configuration.
   
