@@ -9,7 +9,9 @@ The following tasks have been completed:
 any http requests are redirected to https. This should be automated using a configuration
 management tool of your choice and you should feel free to use a self-signed certificate for
 the web server.
+
 • Express everything in code.
+
 • Provide your code in a Git repository named <FIRSTNAME>_Challenge on GitHub.com
   
 The following item is not included, but might be added at a later time:
